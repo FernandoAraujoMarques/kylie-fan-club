@@ -2,33 +2,29 @@
 <html>
 <body>
 
-<p>Count numbers: <output id="result"></output></p>
-<button onclick="startWorker()">Start Worker</button> 
-<button onclick="stopWorker()">Stop Worker</button>
+<p>Click the button to get your coordinates.</p>
 
-<p><strong>Note:</strong> Internet Explorer 9 and earlier versions do not support Web Workers.</p>
+<button onclick="getLocation()">Try It</button>
+
+<p id="demo"></p>
 
 <script>
-var w;
+var x = document.getElementById("demo");
 
-function startWorker() {
-  if(typeof(Worker) !== "undefined") {
-    if(typeof(w) == "undefined") {
-      w = new Worker("demo_workers.js");
-    }
-    w.onmessage = function(event) {
-      document.getElementById("result").innerHTML = event.data;
-    };
-  } else {
-    document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Workers...";
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
   }
 }
 
-function stopWorker() { 
-  w.terminate();
-  w = undefined;
+function showPosition(position) {
+  x.innerHTML = "Latitude: " + position.coords.latitude + 
+  "<br>Longitude: " + position.coords.longitude;
 }
 </script>
 
 </body>
 </html>
+
